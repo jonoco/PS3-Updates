@@ -1,0 +1,58 @@
+html
+	head
+		title PS3 Updates
+		
+		link(href='/style.css' rel='stylesheet')
+
+	body
+		h1 PS3 Packages
+		
+		nav.nav
+			a(
+				href='/list'
+			) game list
+
+		form(
+			action='/'
+		)
+			input(
+				type='text'
+				name='title'
+				placeholder='search by name'
+				class='search'
+			)
+
+		form(action='/')
+			input(
+				type='text'
+				name='id'
+				placeholder='search by game code'
+				class='search'
+			)
+
+		if !json & !list & !error
+			h2 Try searching for a game...
+
+		if error
+			h2 (╯°□°）╯︵ ┻━┻
+			h3 We couldn't find anything god damn it
+
+		if json
+			- var pkgs = json.titlepatch.tag[0].package
+			h2= pkgs[pkgs.length-1].paramsfo[0]['TITLE']
+			div.pkg-list
+				each pkg in pkgs
+					div.pkg
+						a(href=pkg.$.url)
+							h2= pkg.$.version
+							p size: #{pkg.$.size}
+							p sha1: #{pkg.$.sha1sum}
+							p sys version: #{pkg.$.ps3_system_ver}
+						
+		
+		if list
+			ul.list
+				each entry in list
+					li 
+						a(href='/id/' + entry.dataValues.code)= entry.dataValues.title
+						span.id= entry.dataValues.code
