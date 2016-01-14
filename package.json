@@ -1,7 +1,7 @@
 {
-  "name": "web-server",
+  "name": "PS3 Updates",
   "version": "1.0.0",
-  "description": "",
+  "description": "App to retrieve PS3 updates easily",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
