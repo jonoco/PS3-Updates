@@ -1,5 +1,5 @@
 {
-  "name": "PS3 Updates",
+  "name": "ps3-updates",
   "version": "1.0.0",
   "description": "App to retrieve PS3 updates easily",
   "main": "index.js",
@@ -8,6 +8,10 @@
   },
   "author": "Joshua N. Cox <joshua.n.cox@gmail.com> (http://jonoco.me/)",
   "license": "MIT",
+  "engines": {
+    "node": "5.0.0",
+    "npm": "3.5.x"
+    },
   "dependencies": {
     "body-parser": "1.14.2",
     "ejs": "2.3.4",
