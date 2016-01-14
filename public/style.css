@@ -51,13 +51,18 @@ li {
 	margin-bottom: 8px;
 }
 
+.title {
+	text-decoration: none;
+	color: inherit;
+}
+
 .nav {
 	margin: 15px auto;
 	text-align: center;
 }
 
 .nav a {
-	color: hsl(0, 0%, 20%);
+	color: inherit;
 }
 
 .nav a:hover {
