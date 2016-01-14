@@ -91,10 +91,6 @@ function getGameList() {
 
 // save game to db
 function saveGame(id, title) {
-  if (!idExists(id)) {
-    atlas.push({ id: id, title: title });  
-  }
-  
   db.game.findOrCreate({ 
     where: {
       code: id,
@@ -123,27 +119,6 @@ function searchByID(id) {
       code: id
     }
   });
-};
-
-function idExists(id) {
-  var exists = atlas.some(function(entry) {
-    if (entry.id == id.toUpperCase()) {
-      return true;
-    }
-  });
-  return exists;
-};
-
-function searchAtlas(search) {
-  var regex = new RegExp(search, 'gi');
-  
-  var entries = atlas.filter(function(entry) {
-    if (entry.title.search(regex) !== -1) return entry
-  });
-
-  console.log(`found ${entries.length} entries`);
-
-  return entries;
 };
 
 function getXML(id) {
@@ -177,9 +152,6 @@ function getXML(id) {
     });
   });
 };
-
-// hydrate the list
-atlas.push({id: 'NPUB31419', title:'Minecraft'});
 
 //db
 db.sequelize.sync().then(function() {
