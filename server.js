@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var app = express();
 var PORT = process.env.PORT || 9000;
@@ -12,7 +14,7 @@ var atlas = []; // {id:string, title:string}
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
-app.set('views', 'src/views');
+app.set('views', __dirname + '/src/views');
 
 // // Route level middleware is provided in the route
 app.get('/', function(req, res) {
