@@ -19,6 +19,11 @@ h3 {
 	font-size: 1.7em;
 }
 
+h4 {
+	text-align: center;
+	font-size: 1.2em;
+}
+
 input {
 	border: none;
 	width: 40vw;
@@ -90,4 +95,11 @@ li {
 
 .pkg a {
 	text-decoration: none;
+}
+
+.info {
+	text-align: center;
+	margin: 0 auto;
+	max-width: 450px;
+	color: inherit;
 }
