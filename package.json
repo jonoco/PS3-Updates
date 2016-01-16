@@ -4,8 +4,7 @@
   "description": "App to retrieve PS3 updates easily",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "echo \"Hello\""
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Joshua N. Cox <joshua.n.cox@gmail.com> (http://jonoco.me/)",
   "license": "MIT",
@@ -15,7 +14,6 @@
     },
   "dependencies": {
     "body-parser": "1.14.2",
-    "ejs": "2.3.4",
     "express": "4.13.3",
     "jade": "1.11.0",
     "sequelize": "3.17.1",
