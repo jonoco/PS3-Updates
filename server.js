@@ -81,7 +81,6 @@ app.get('/list', function(req, res) {
     console.log(error);
     res.render('index', {error: 'error'});
   });
-  console.log('list: ' + list);
 });
 
 // return a full list of games
