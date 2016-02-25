@@ -7,39 +7,33 @@ var util = require('util');
 var bodyParser = require('body-parser');
 var db = require('./db.js');
 
-var atlas = []; // {id:string, title:string}
-
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
 app.set('views', __dirname + '/src/views');
 
-// // Route level middleware is provided in the route
 app.get('/', function(req, res) {
   
   var query = req.query;
   if (query.hasOwnProperty('title')) {
     searchByTitle(query.title).then(function(results) {
-    
-    console.log('## results', results);
 
-    var first = results[0];
-    var id = (results.length > 0) ? first.dataValues.code : query.title;
-    res.redirect('/id/' + id);
+      var first = results[0];
+      var id = (results.length > 0) ? first.dataValues.code : query.title;
+      
+      if (results.length > 1) {
+        res.render('index', {list: results});
+      } else {
+        res.redirect('/id/' + id);  
+      }
 
-  }, function(error) {
-    console.log(error);
-  });
-
-    // use the first entry from the atlas or just the search term
-    // TODO: show a list of entries for multiple matches
-    // var id = (results) ? results[0].get('id') : query.title;
-
-    // res.redirect('/id/' + id);
+    }, function(error) {
+      console.log(error);
+      res.render('index', {error: 'error'});
+    });
 
   } else if (query.hasOwnProperty('id')) {
     searchByID(query.id).then(function(result) {
-      console.log('## results', result);
       
       var id = (result) ? result.dataValues.code : query.id.toUpperCase();
       res.redirect('/id/' + id);
@@ -57,14 +51,13 @@ app.get('/id/:id', function(req, res) {
   
   getXML(id).then(function(xml) {
     parseString(xml, function(err, result) {
-
-      //console.log(util.inspect(result, false, null));
       
-      // store successful search
+      // store successful searches in the db
       var pkgs = result.titlepatch.tag[0].package;
       var title = pkgs[pkgs.length-1].paramsfo[0]['TITLE'][0];
-      
-      saveGame(id, title);
+      var alias = title.toLowerCase();
+
+      saveGame(id, title, alias);
 
       res.render('index', {json: result});
     });
@@ -74,8 +67,7 @@ app.get('/id/:id', function(req, res) {
 });
 
 app.get('/list', function(req, res) {
-  var list = getGameList().then(function(results) {
-    console.log(results);
+  getGameList().then(function(results) {
     res.render('index', {list: results});
   }, function(error) {
     console.log(error);
@@ -89,14 +81,15 @@ function getGameList() {
 };
 
 // save game to db
-function saveGame(id, title) {
+function saveGame(id, title, alias) {
   db.game.findOrCreate({ 
     where: {
       code: id,
-      title: title 
+      title: title,
+      alias: alias 
     }
   }).then(function(game) {
-    console.log('game saved successfully');
+    console.log('game saved successfully: ' + game);
   })
 };
 
@@ -104,8 +97,8 @@ function saveGame(id, title) {
 function searchByTitle(title) {
   return db.game.findAll({
     where: {
-      title: {
-        $like: '%' + title + '%'
+      alias: {
+        $like: '%' + title.toLowerCase() + '%'
       }
     }
   });
@@ -153,7 +146,7 @@ function getXML(id) {
 };
 
 //db
-db.sequelize.sync().then(function() {
+db.sequelize.sync({force:true}).then(function() {
   app.listen(PORT, function() {
     console.log('Listening on port ' + PORT + ' ...');  
   }); 
