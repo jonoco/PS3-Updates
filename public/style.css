@@ -103,3 +103,7 @@ li {
 	max-width: 450px;
 	color: inherit;
 }
+
+.error {
+	color: #AF0008;
+}

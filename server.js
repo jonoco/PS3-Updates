@@ -62,7 +62,7 @@ app.get('/id/:id', function(req, res) {
       res.render('index', {json: result});
     });
   }).catch(function(e) {
-    res.render('index', {error: id});
+    res.render('index', {error: e});
   });
 });
 
@@ -77,7 +77,9 @@ app.get('/list', function(req, res) {
 
 // return a full list of games
 function getGameList() {
-  return db.game.findAll({});
+  return db.game.findAll({
+    order: 'title ASC'
+  });
 };
 
 // save game to db
@@ -130,7 +132,12 @@ function getXML(id) {
       console.log('headers: ', res.headers);
       
       if (res.statusCode == 404) {
-        reject();
+        reject('No title with that id found');
+      }
+
+      // Package found, but no content
+      if (res.headers['content-length'] == '0') {
+        reject('We couldn\'t find any updates for that title');
       }
 
       res.on('data', (d) => {

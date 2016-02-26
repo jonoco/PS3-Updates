@@ -38,7 +38,8 @@ html
 
 		if error
 			h2 (╯°□°）╯︵ ┻━┻
-			h3 We couldn't find anything god damn it
+			h3 We've had some trouble
+			h4.error= error
 
 		if json
 			- var pkgs = json.titlepatch.tag[0].package
