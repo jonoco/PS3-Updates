@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node server"
+    "dev": "node server && npm run watch-css",
+    "build-css": "./bin/build-css",
+    "watch-css": "./bin/watch-css"
   },
   "author": "Joshua N. Cox <joshua.n.cox@gmail.com> (http://jonoco.me/)",
   "license": "MIT",
@@ -24,6 +26,8 @@
     "xml2js": "0.4.15"
   },
   "devDependencies": {
+    "node-sass": "3.4.2",
+    "nodemon": "1.9.1",
     "sqlite3": "3.1.1"
   }
 }

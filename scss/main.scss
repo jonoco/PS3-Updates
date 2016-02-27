@@ -26,8 +26,8 @@ h4 {
 
 input {
 	border: none;
-	width: 40vw;
-	min-width: 180px;
+	width: 20vw;
+	min-width: 250px;
 	margin: 15px auto;
 	display: block;
 	text-align: center;
@@ -37,22 +37,26 @@ input {
 	outline: none;
 	border-bottom: 2px solid hsla(0, 0%, 0%, 0);
 	transition: all 0.35s ease;
+
+	&:hover {
+		background: hsla(0, 0%, 95%, 1);
+		border-radius: 10px;
+		width: 40vw;	
+	}
+
+	&[type="text"]:focus {
+		border-bottom: 2px solid hsl(0, 0%, 10%);
+	}
 }
 
-input:hover {
-	background: hsla(0, 0%, 90%, 1);
-	border-radius: 10px;
-}
-
-input[type="text"]:focus {
-	border-bottom: 2px solid hsl(0, 0%, 10%);
+form {
+	width: 100vw;
 }
 
 button {
 	margin: 10px auto;
 	display: block;
 }
-
 
 ul {
 	list-style: none;	
@@ -70,15 +74,12 @@ li {
 .nav {
 	margin: 15px auto;
 	text-align: center;
-}
 
-.nav a {
-	font-size: 20px;
-	color: inherit;
-}
-
-.nav a:hover {
-	color: #AF1016;
+	a {
+		font-size: 20px;
+		color: inherit;	
+		&:hover { color: #AF1016; }
+	}
 }
 
 .id {
@@ -94,14 +95,9 @@ li {
 
 .pkg {
 	transition: all 0.25s ease;
-}
-
-.pkg:hover {
-	background-color: hsl(0, 0%, 90%);
-}
-
-.pkg a {
-	text-decoration: none;
+	&:hover { background-color: hsl(0, 0%, 90%); }
+	a { text-decoration: none; }
+	p { margin-left: 8px; }
 }
 
 .info {
@@ -113,4 +109,16 @@ li {
 
 .error {
 	color: #AF0008;
+}
+
+.hint {
+	font-size: 1em;
+	text-align: center;
+	margin: 0 auto;
+	color: #8A1808;
+	transition: .35s all ease;
+}
+
+.hide {
+	color: rgba(0,0,0,0);	
 }
