@@ -23,13 +23,18 @@ html
 				class='search'
 			)
 
-		form(action='/')
+		form(
+			action='/' 
+			class='id-form'
+		)
 			input(
 				type='text'
 				name='id'
 				placeholder='search by game code'
 				class='search'
+				required pattern='[a-zA-Z0-9]{9}'
 			)
+			span.hint only use a-z, 0-9, with no spaces
 
 		if !json & !list & !error
 			h2 Try searching for a game...

@@ -16,7 +16,14 @@ app.get('/', function(req, res) {
   
   var query = req.query;
   if (query.hasOwnProperty('title')) {
+
     searchByTitle(query.title).then(function(results) {
+      
+      // No results from the DB
+      if (results.length == 0) {
+        res.render('index', {error: `Nothing in the game list found for \"${query.title}\"`});
+        return;
+      }
 
       var first = results[0];
       var id = (results.length > 0) ? first.dataValues.code : query.title;
@@ -29,7 +36,7 @@ app.get('/', function(req, res) {
 
     }, function(error) {
       console.log(error);
-      res.render('index', {error: 'error'});
+      res.render('index', {error: error});
     });
 
   } else if (query.hasOwnProperty('id')) {
