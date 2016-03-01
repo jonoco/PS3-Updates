@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var PORT = process.env.PORT || 9001;
+var PORT = process.env.PORT || 8080;
 var https = require('https');
 var parseString = require('xml2js').parseString;
 var util = require('util');
@@ -19,18 +19,15 @@ app.get('/', function(req, res) {
 
     searchByTitle(query.title).then(function(results) {
       
-      // No results from the DB
-      if (results.length == 0) {
-        res.render('index', {error: `Nothing in the game list found for \"${query.title}\"`});
-        return;
-      }
-
-      var first = results[0];
-      var id = (results.length > 0) ? first.dataValues.code : query.title;
-      
       if (results.length > 1) {
         res.render('index', {list: results});
+
+      } else if (results.length == 0) { // No results from the DB
+        res.render('index', {error: `Nothing in the game list found for \"${query.title}\"`});
+        //return;
+
       } else {
+        var id = (results.length > 0) ? results[0].dataValues.code : query.title;
         res.redirect('/id/' + id);  
       }
 
@@ -40,6 +37,7 @@ app.get('/', function(req, res) {
     });
 
   } else if (query.hasOwnProperty('id')) {
+   
     searchByID(query.id).then(function(result) {
       
       var id = (result) ? result.dataValues.code : query.id.toUpperCase();
