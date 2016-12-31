@@ -2,3 +2,4 @@ node_modules
 keys.js
 data/*.sqlite
 .tmp/*.css
+.DS_Store

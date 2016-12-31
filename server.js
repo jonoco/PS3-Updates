@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var PORT = process.env.PORT || 8080;
+var PORT = process.env.PORT || 9000;
 var https = require('https');
 var parseString = require('xml2js').parseString;
 var util = require('util');
@@ -24,7 +24,6 @@ app.get('/', function(req, res) {
 
       } else if (results.length == 0) { // No results from the DB
         res.render('index', {error: `Nothing in the game list found for \"${query.title}\"`});
-        //return;
 
       } else {
         var id = (results.length > 0) ? results[0].dataValues.code : query.title;
@@ -71,6 +70,12 @@ app.get('/id/:id', function(req, res) {
   });
 });
 
+app.get('/scan/:type', function(req, res) {
+  var type = req.params.type;
+  scan(0, type);
+  res.render('index', {error: 'no error; scan is running for ' + type});
+});
+
 app.get('/list', function(req, res) {
   getGameList().then(function(results) {
     res.render('index', {list: results});
@@ -79,6 +84,33 @@ app.get('/list', function(req, res) {
     res.render('index', {error: 'error'});
   });
 });
+
+// find an save a game, returning true on success, otherwise error
+function scan(i, type) {
+  // scan sony server for titles
+  var MAX = 99999;
+  var val = ("00000" + i).slice(-5);
+  var id = '' + type + val;
+
+  if (i >= MAX) return;
+
+  getXML(id).then(function(xml) {
+      parseString(xml, function(err, result) {
+        
+        // store successful searches in the db
+        var pkgs = result.titlepatch.tag[0].package;
+        var title = pkgs[pkgs.length-1].paramsfo[0]['TITLE'][0];
+        var alias = title.toLowerCase();
+
+        saveGame(id, title, alias);
+
+        scan(i++, type);
+      });
+    }).catch(function(e) {
+      console.log('Scan error at ' +i+ ' on type ' +type+ ': ' + e);
+    });
+
+}
 
 // return a full list of games
 function getGameList() {
@@ -156,6 +188,11 @@ function getXML(id) {
     });
   });
 };
+
+process.on('uncaughtException', function(e) {
+  var timeStamp = new Date().toUTCString();
+  console.log(timeStamp + " : " + e);
+});
 
 //db
 db.sequelize.sync().then(function() {
