@@ -107,7 +107,7 @@ function scan(i, type) {
         scan(i++, type);
       });
     }).catch(function(e) {
-      console.log('Scan error at ' +i+ ' on type ' +type+ ': ' + e);
+      scan(i++, type);
     });
 
 }
