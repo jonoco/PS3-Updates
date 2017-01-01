@@ -72,7 +72,7 @@ app.get('/id/:id', function(req, res) {
 
 app.get('/scan/:type', function(req, res) {
   var type = req.params.type;
-  scan(0, type);
+  scan(0, type.toUpperCase());
   res.render('index', {error: 'no error; scan is running for ' + type});
 });
 
@@ -93,6 +93,8 @@ function scan(i, type) {
   var id = '' + type + val;
 
   if (i >= MAX) return;
+
+  console.log('scanning ' + id);
 
   getXML(id).then(function(xml) {
       parseString(xml, function(err, result) {
@@ -165,8 +167,8 @@ function getXML(id) {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
     var req = https.request(options, (res) => {
-      console.log('statusCode: ', res.statusCode);
-      console.log('headers: ', res.headers);
+      //console.log('statusCode: ', res.statusCode);
+      //console.log('headers: ', res.headers);
       
       if (res.statusCode == 404) {
         reject('No title with that id found');
