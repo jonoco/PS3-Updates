@@ -108,10 +108,10 @@ function scan(i, type) {
 
         saveGame(id, title, alias);
 
-        scan(index++, type);
+        scan(index+1, type);
       });
     }).catch(function(e) {
-      scan(index++, type);
+      scan(index+1, type);
     });
 
 }
