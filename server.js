@@ -92,9 +92,9 @@ function scan(i, type) {
   var val = ("00000" + i).slice(-5);
   var id = '' + type + val;
 
-  if (i >= MAX) return;
+  var index = Number(i);
 
-  var index = i++;
+  if (index >= MAX) return;
 
   console.log('scanning ' + id);
 
@@ -108,10 +108,10 @@ function scan(i, type) {
 
         saveGame(id, title, alias);
 
-        scan(index, type);
+        scan(index++, type);
       });
     }).catch(function(e) {
-      scan(index, type);
+      scan(index++, type);
     });
 
 }
