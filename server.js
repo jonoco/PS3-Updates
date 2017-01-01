@@ -94,6 +94,8 @@ function scan(i, type) {
 
   if (i >= MAX) return;
 
+  var index = i++;
+
   console.log('scanning ' + id);
 
   getXML(id).then(function(xml) {
@@ -106,10 +108,10 @@ function scan(i, type) {
 
         saveGame(id, title, alias);
 
-        scan(i++, type);
+        scan(index, type);
       });
     }).catch(function(e) {
-      scan(i++, type);
+      scan(index, type);
     });
 
 }
