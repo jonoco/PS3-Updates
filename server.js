@@ -70,9 +70,23 @@ app.get('/id/:id', function(req, res) {
   });
 });
 
-app.get('/scan/:type', function(req, res) {
-  var type = req.params.type;
-  scan(0, type.toUpperCase());
+
+/*
+ * Start scan for titles of given [type], with an optional [min] and [max] serial
+ * [min] defaults to 0, [max] defaults to 99999
+ */
+app.get('/scan', function(req, res) {
+  // var type = req.params.type;
+  var query = req.query;
+  var type = query.hasOwnProperty('type') ? query.type : null;
+  var min = query.hasOwnProperty('min') ? Number(query.min) : null;
+  var max = query.hasOwnProperty('max') ? Number(query.max) : null;
+
+  if (!type) {
+    res.render('index', {error: 'you must include a [type]'});
+  }
+  
+  scan(min, max, type.toUpperCase());
   res.render('index', {error: 'no error; scan is running for ' + type});
 });
 
@@ -85,16 +99,17 @@ app.get('/list', function(req, res) {
   });
 });
 
-// find an save a game, returning true on success, otherwise error
-function scan(i, type) {
+/* Check if a range of title serials for a type exists
+ * Saving title on success, otherwise continuing
+ */
+function scan(i = 0, max = 99999 , type) {
   // scan sony server for titles
-  var MAX = 99999;
-  var val = ("00000" + i).slice(-5);
-  var id = '' + type + val;
+  var serial = ("00000" + i).slice(-5);
+  var id = `${type}${serial}`;
 
   var index = Number(i);
 
-  if (index >= MAX) return;
+  if (index >= max) return;
 
   console.log('scanning ' + id);
 
@@ -108,10 +123,10 @@ function scan(i, type) {
 
         saveGame(id, title, alias);
 
-        scan(index+1, type);
+        scan(index+1, max, type);
       });
     }).catch(function(e) {
-      scan(index+1, type);
+      scan(index+1, max, type);
     });
 
 }
