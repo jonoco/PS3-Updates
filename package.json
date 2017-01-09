@@ -11,7 +11,7 @@
   "author": "Joshua N. Cox <joshua.n.cox@gmail.com> (http://jonoco.me/)",
   "license": "MIT",
   "engines": {
-    "node": "5.0.0",
+    "node": "6.9.4",
     "npm": "3.5.x"
   },
   "dependencies": {
