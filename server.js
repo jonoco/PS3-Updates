@@ -79,11 +79,11 @@ app.get('/scan', function(req, res) {
   // var type = req.params.type;
   var query = req.query;
   var type = query.hasOwnProperty('type') ? query.type : null;
-  var min = query.hasOwnProperty('min') ? Number(query.min) : null;
-  var max = query.hasOwnProperty('max') ? Number(query.max) : null;
+  var min = query.hasOwnProperty('min') ? query.min : null;
+  var max = query.hasOwnProperty('max') ? query.max : null;
 
   if (!type) {
-    res.render('index', {error: 'you must include a [type]'});
+    return res.render('index', {error: 'you must include a [type]'});
   }
   
   scan(min, max, type.toUpperCase());
@@ -104,14 +104,12 @@ app.get('/list', function(req, res) {
  */
 function scan(i, max , type) {
   // scan sony server for titles
-  i = (typeof i !== 'undefined') ? i : 0;
-  max = (typeof max !== 'undefined') ? max : 99999;
+  i = (typeof i !== 'undefined') ? Number(i) : 0;
+  max = (typeof max !== 'undefined') ? Number(max) : 99999;
   var serial = ("00000" + i).slice(-5);
   var id = `${type}${serial}`;
 
-  var index = Number(i);
-
-  if (index >= max) return;
+  if (i >= max) return;
 
   console.log('scanning ' + id);
 
@@ -125,10 +123,10 @@ function scan(i, max , type) {
 
         saveGame(id, title, alias);
 
-        scan(index+1, max, type);
+        scan(i+1, max, type);
       });
     }).catch(function(e) {
-      scan(index+1, max, type);
+      scan(i+1, max, type);
     });
 
 }
