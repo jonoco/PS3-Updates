@@ -82,12 +82,14 @@ app.get('/scan', function(req, res) {
   var min = query.hasOwnProperty('min') ? query.min : null;
   var max = query.hasOwnProperty('max') ? query.max : null;
 
+  console.log(`${type} : ${min} : ${max}`)
+
   if (!type) {
     return res.render('index', {error: 'you must include a [type]'});
   }
   
   scan(min, max, type.toUpperCase());
-  res.render('index', {error: 'no error; scan is running for ' + type});
+  res.render('index', {error: `no error; scan is running for ${type}`});
 });
 
 app.get('/list', function(req, res) {
@@ -104,14 +106,14 @@ app.get('/list', function(req, res) {
  */
 function scan(i, max , type) {
   // scan sony server for titles
-  i = (typeof i !== 'undefined') ? Number(i) : 0;
-  max = (typeof max !== 'undefined') ? Number(max) : 99999;
+  i = i ? Number(i) : 0;
+  max = max ? Number(max) : 99999;
   var serial = ("00000" + i).slice(-5);
   var id = `${type}${serial}`;
 
   if (i >= max) return;
 
-  console.log('scanning ' + id);
+  console.log(`scanning ${type} : ${i} : ${max}`);
 
   getXML(id).then(function(xml) {
       parseString(xml, function(err, result) {
