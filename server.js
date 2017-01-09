@@ -102,8 +102,10 @@ app.get('/list', function(req, res) {
 /* Check if a range of title serials for a type exists
  * Saving title on success, otherwise continuing
  */
-function scan(i = 0, max = 99999 , type) {
+function scan(i, max , type) {
   // scan sony server for titles
+  i = (typeof i !== 'undefined') ? i : 0;
+  max = (typeof max !== 'undefined') ? max : 99999;
   var serial = ("00000" + i).slice(-5);
   var id = `${type}${serial}`;
 
