@@ -20,7 +20,7 @@
     "body-parser": "1.14.2",
     "express": "4.13.3",
     "jade": "1.11.0",
-    "pg": "4.4.3",
+    "pg": "4.5.5",
     "pg-hstore": "2.3.2",
     "sequelize": "3.17.1",
     "underscore": "1.8.3",
