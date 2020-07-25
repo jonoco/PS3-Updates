@@ -13,12 +13,12 @@ app.set('view engine', 'jade');
 app.set('views', __dirname + '/src/views');
 
 app.get('/', function(req, res) {
-  
+
   var query = req.query;
   if (query.hasOwnProperty('title')) {
 
     searchByTitle(query.title).then(function(results) {
-      
+
       if (results.length > 1) {
         res.render('index', {list: results});
 
@@ -27,7 +27,7 @@ app.get('/', function(req, res) {
 
       } else {
         var id = (results.length > 0) ? results[0].dataValues.code : query.title;
-        res.redirect('/id/' + id);  
+        res.redirect('/id/' + id);
       }
 
     }, function(error) {
@@ -36,9 +36,9 @@ app.get('/', function(req, res) {
     });
 
   } else if (query.hasOwnProperty('id')) {
-   
+
     searchByID(query.id).then(function(result) {
-      
+
       var id = (result) ? result.dataValues.code : query.id.toUpperCase();
       res.redirect('/id/' + id);
 
@@ -52,10 +52,10 @@ app.get('/', function(req, res) {
 
 app.get('/id/:id', function(req, res) {
   var id = req.params.id;
-  
+
   getXML(id).then(function(xml) {
     parseString(xml, function(err, result) {
-      
+
       // store successful searches in the db
       var pkgs = result.titlepatch.tag[0].package;
       var title = pkgs[pkgs.length-1].paramsfo[0]['TITLE'][0];
@@ -87,7 +87,7 @@ app.get('/scan', function(req, res) {
   if (!type) {
     return res.render('index', {error: 'you must include a [type]'});
   }
-  
+
   scan(min, max, type.toUpperCase());
   res.render('index', {error: `no error; scan is running for ${type}`});
 });
@@ -117,7 +117,7 @@ function scan(i, max , type) {
 
   getXML(id).then(function(xml) {
       parseString(xml, function(err, result) {
-        
+
         // store successful searches in the db
         var pkgs = result.titlepatch.tag[0].package;
         var title = pkgs[pkgs.length-1].paramsfo[0]['TITLE'][0];
@@ -142,11 +142,11 @@ function getGameList() {
 
 // save game to db
 function saveGame(id, title, alias) {
-  db.game.findOrCreate({ 
+  db.game.findOrCreate({
     where: {
       code: id,
       title: title,
-      alias: alias 
+      alias: alias
     }
   }).then(function(game) {
     console.log('game saved successfully: ' + game);
@@ -188,7 +188,7 @@ function getXML(id) {
     var req = https.request(options, (res) => {
       //console.log('statusCode: ', res.statusCode);
       //console.log('headers: ', res.headers);
-      
+
       if (res.statusCode == 404) {
         reject('No title with that id found');
       }
@@ -212,12 +212,12 @@ function getXML(id) {
 
 process.on('uncaughtException', function(e) {
   var timeStamp = new Date().toUTCString();
-  console.log(timeStamp + " : " + e);
+  console.log("Error | " + timeStamp + " : " + e);
 });
 
 //db
 db.sequelize.sync().then(function() {
   app.listen(PORT, function() {
-    console.log('Listening on port ' + PORT + ' ...');  
-  }); 
+    console.log('Listening on port ' + PORT + ' ...');
+  });
 });
