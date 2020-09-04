@@ -22,7 +22,7 @@
     "jade": "1.11.0",
     "pg": "4.5.5",
     "pg-hstore": "2.3.2",
-    "sequelize": "3.17.1",
+    "sequelize": "6.3.5",
     "underscore": "1.8.3",
     "xml2js": "0.4.15"
   },
